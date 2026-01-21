@@ -6,7 +6,7 @@ import prisma from "../../../../lib/prisma";
 export async function POST(request: NextRequest) {
   const secret = process.env.PROVIDER_WEBHOOK_SECRET || process.env.TATUM_HMAC_SECRET;
   const xPayloadHash = request.headers.get("x-payload-hash");
-
+  
   // Read raw body
   const raw = await request.text();
   let parsed: any;

@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
     const update = await req.json();
     console.log("📩 Telegram update:", update);
 
-    // Telegram sends many update types — we only care about button clicks
     if (!update.callback_query) {
       return NextResponse.json({ ok: true });
     }
@@ -34,9 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    // -------------------------
-    // ACTION PARSING
-    // -------------------------
+
     const [action, reference] = data.split("_");
 
     if (!reference) {
@@ -46,7 +43,6 @@ export async function POST(req: NextRequest) {
 
     console.log(`🔘 Action: ${action}, Reference: ${reference}`);
 
-    // Fetch deposit first (important)
     const deposit = await prisma.deposit.findUnique({
       where: { reference },
     });
@@ -57,15 +53,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    // Prevent double actions
     if (deposit.status !== "pending") {
       await answer(callback.id, `Already ${deposit.status} ⚠️`);
       return NextResponse.json({ ok: true });
     }
 
-    // -------------------------
-    // APPROVE
-    // -------------------------
+ 
     if (action === "approve") {
       await prisma.deposit.update({
         where: { reference },
@@ -78,9 +71,7 @@ export async function POST(req: NextRequest) {
       console.log("🟢 Deposit approved:", reference);
     }
 
-    // -------------------------
-    // REJECT
-    // -------------------------
+
     if (action === "reject") {
       await prisma.deposit.update({
         where: { reference },
@@ -100,7 +91,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-/* ---------------- HELPERS ---------------- */
 
 async function answer(callbackQueryId: string, text: string) {
   return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
