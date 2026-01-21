@@ -37,14 +37,15 @@ export async function POST(req: Request) {
     const payload = {
       chat_id: ADMIN_CHAT_ID,
       text,
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: "✅ Seen", callback_data: `seen_${reference}` },
-            { text: "❌ Unseen", callback_data: `unseen_${reference}` },
-          ],
-        ],
-      },
+    reply_markup: {
+  inline_keyboard: [
+    [
+      { text: "✅ Approve", callback_data: `approve_${reference}` },
+      { text: "❌ Reject", callback_data: `reject_${reference}` },
+    ],
+  ],
+},
+
     };
 
     // Send message to Telegram
