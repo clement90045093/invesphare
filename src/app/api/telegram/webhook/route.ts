@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const BOT_TOKEN = "8290283851:AAEhp4p_9N09yqUabiPigO38Qx-VApLvOr8";
 
 export async function POST(req: NextRequest) {
   try {
