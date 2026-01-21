@@ -21,7 +21,7 @@ export default function BalanceCards() {
   useEffect(() => {
     async function fetchSummary() {
       try {
-        const res = await fetch("/api/dashboard/summary");
+        const res = await fetch("/api/summary");
         const data = await res.json();
         setSummary(data);
       } catch (err) {
