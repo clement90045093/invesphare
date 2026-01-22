@@ -17,7 +17,7 @@ export async function GET() {
       return NextResponse.json({ message: "Authentication required" }, { status: 401 });
     }
 
-    // find local user by Supabase UUID or email
+    // Find local user by Supabase UUID or email
     let localUser = await prisma.user.findUnique({ where: { id: supUser.id } });
     if (!localUser && supUser.email) {
       localUser = await prisma.user.findUnique({ where: { email: supUser.email } });
@@ -26,6 +26,7 @@ export async function GET() {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    // Last 10 transactions
     const recentTransactions = await prisma.deposit.findMany({
       where: { userId: localUser.id },
       orderBy: { createdAt: "desc" },
@@ -42,16 +43,23 @@ export async function GET() {
       },
     });
 
+    // Pending deposits
     const pendingCount = await prisma.deposit.count({
       where: { userId: localUser.id, status: "pending" },
     });
 
-    // Calculate deposited dynamically from confirmed deposits
-    const deposited = recentTransactions
-      .filter((d) => d.status === "confirmed")
-      .reduce((s, d) => s + (d.receivedAmount ?? d.amount ?? 0), 0);
+    // Sum approved deposits
+    const totalDeposited = await prisma.deposit.aggregate({
+      where: { userId: localUser.id, status: "approved" },
+      _sum: { receivedAmount: true, amount: true },
+    });
 
-    return NextResponse.json({ deposited, pendingCount, recentTransactions });
+    const deposited = totalDeposited._sum.receivedAmount ?? totalDeposited._sum.amount ?? 0;
+
+    // Example profit calculation (replace with your own logic)
+    const profit = 0; // or calculate based on your business logic
+
+    return NextResponse.json({ deposited, pendingCount, recentTransactions, profit });
   } catch (err: any) {
     console.error("Error in dashboard route:", err);
     return NextResponse.json({ message: err?.message || "Server error" }, { status: 500 });

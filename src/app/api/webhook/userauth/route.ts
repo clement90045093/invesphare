@@ -1,64 +1,84 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 // Supabase auth webhooks: when a user is created/updated/deleted, the webhook
-// will POST a payload. We upsert a local User record by email to keep in sync.
+// will POST a payload. We upsert a local User record to keep in sync.
 
 export async function POST(request: Request) {
-  // Minimal debug logging: record headers and raw body length
-  const headersObj: Record<string, string | null> = {};
-  for (const [k, v] of request.headers) headersObj[k] = v;
-  console.info("Supabase webhook headers:", headersObj);
-
   const raw = await request.text();
-  console.info("Supabase webhook raw body length:", raw.length);
-  console.log("Supabase webhook received:", raw);
-  let parsed: any;
+  console.log("[v0] Supabase webhook received:", raw);
+
+  let parsed: Record<string, unknown>;
   try {
     parsed = JSON.parse(raw);
-  } catch (err) {
+  } catch {
     return NextResponse.json({ message: "invalid json" }, { status: 400 });
   }
 
-  // Signature verification removed — accept all incoming webhook requests.
-
   // Extract user object from common webhook shapes
-  const user = parsed?.user || parsed?.record || parsed?.new || parsed?.data?.new || parsed?.event?.body?.user || parsed?.event?.body || parsed;
-  const eventType = parsed?.type || parsed?.event?.type || parsed?.event?.name || null;
+  const user =
+    (parsed?.user as Record<string, unknown>) ||
+    (parsed?.record as Record<string, unknown>) ||
+    (parsed?.new as Record<string, unknown>) ||
+    ((parsed?.data as Record<string, unknown>)?.new as Record<string, unknown>) ||
+    parsed;
 
   if (!user || !user.email) {
-    console.warn("Supabase webhook received but no user email found", { body: parsed });
+    console.warn("[v0] Supabase webhook: no user email found", { body: parsed });
     return NextResponse.json({ ok: true });
   }
 
-  const id =  user?.id
-  const email: string = user.email;
-  const name: string | null = user.user_metadata?.full_name || user.user_metadata?.name || user.name || null;
-  const supabaseId: string | null = user.id || user.user_id || null;
+  // Extract necessary data from Supabase auth user
+  const id = user.id as string;
+  const email = user.email as string;
+  const userMetadata = user.user_metadata as Record<string, unknown> | undefined;
+  const name =
+    (userMetadata?.full_name as string) ||
+    (userMetadata?.first_name as string) ||
+    (userMetadata?.name as string) ||
+    (user.name as string) ||
+    null;
 
-  // Retry logic for DB upsert to handle transient DB errors
+  // Retry logic for DB upsert
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const existing = await prisma.user.findUnique({ where: { email } });
+      const existing = await prisma.user.findUnique({ where: { id } });
+
       if (existing) {
-        await prisma.user.update({ where: { email }, data: { id, name: name ?? existing.name } });
-        console.info("Updated local user from supabase webhook", { email });
+        await prisma.user.update({
+          where: { id },
+          data: {
+            email,
+            name: name ?? existing.name,
+            updatedAt: new Date(),
+          },
+        });
+        console.info("[v0] Updated user from supabase webhook", { id, email });
       } else {
-        await prisma.user.create({ data: { id, email, name } });
-        console.info("Created local user from supabase webhook", { email });
+        await prisma.user.create({
+          data: {
+            id,
+            email,
+            name,
+            balance: 0,
+          },
+        });
+        console.info("[v0] Created user from supabase webhook", { id, email });
       }
 
       return NextResponse.json({ ok: true });
-    } catch (err: any) {
-      console.error(`Error syncing user from supabase webhook (attempt ${attempt})`, err?.message || err);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      console.error(`[v0] Error syncing user (attempt ${attempt})`, message);
+
       if (attempt === maxAttempts) {
-        return NextResponse.json({ message: err?.message || "server error" }, { status: 500 });
+        return NextResponse.json({ message }, { status: 500 });
       }
-      // exponential-ish backoff
-      const delay = 150 * attempt;
-      await new Promise((res) => setTimeout(res, delay));
-      continue;
+
+      await new Promise((res) => setTimeout(res, 150 * attempt));
     }
   }
+
+  return NextResponse.json({ ok: true });
 }

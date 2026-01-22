@@ -10,4 +10,5 @@
  */
 export type * from './models/User'
 export type * from './models/Deposit'
+export type * from './models/Investment'
 export type * from './commonInputTypes'

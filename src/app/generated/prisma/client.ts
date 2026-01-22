@@ -49,3 +49,8 @@ export type User = Prisma.UserModel
  * 
  */
 export type Deposit = Prisma.DepositModel
+/**
+ * Model Investment
+ * 
+ */
+export type Investment = Prisma.InvestmentModel

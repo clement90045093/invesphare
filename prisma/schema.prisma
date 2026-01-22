@@ -14,11 +14,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  name     String?
-  balance  Float     @default(0)
-  deposits Deposit[]
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String?
+  balance     Float        @default(0)
+  deposits    Deposit[]
+  investments Investment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Deposit {
@@ -37,4 +40,29 @@ model Deposit {
   expiresAt         DateTime?
   createdAt         DateTime  @default(now())
   confirmedAt       DateTime?
+}
+
+model Investment {
+  id              Int       @id @default(autoincrement())
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id])
+  plan            String // starter, professional, premium
+  amount          Float
+  currency        String
+  dailyRate       Float // e.g., 0.008 for 0.8%
+  duration        Int // duration in days
+  expectedProfit  Float // calculated total profit
+  totalReturn     Float // amount + expectedProfit
+  address         String // deposit address
+  reference       String    @unique
+  status          String    @default("pending") // pending, active, completed, cancelled
+  txHash          String?
+  receivedAmount  Float?
+  providerPayload Json?
+  expiresAt       DateTime?
+  startedAt       DateTime? // when investment became active
+  maturesAt       DateTime? // when investment completes
+  createdAt       DateTime  @default(now())
+  confirmedAt     DateTime?
+  completedAt     DateTime?
 }

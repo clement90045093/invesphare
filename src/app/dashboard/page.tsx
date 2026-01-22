@@ -183,8 +183,7 @@ export default function DashboardPage() {
         </header>
 
         {/* Summary Cards */}
-        <BalanceCards />
-
+       <BalanceCards summary={summary} loading={loading} />
         {/* Chart and Forex sections removed per request */}
 
         <RecentTransactions transactions={transactions} />

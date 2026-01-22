@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type Summary = {
   deposited?: number;
@@ -8,30 +8,17 @@ type Summary = {
   pendingCount?: number;
 };
 
-const cards = [
-  { label: "Deposited", key: "deposited", icon: "💰" },
-  { label: "Profit", key: "profit", icon: "💹" },
-  { label: "Pending", key: "pending", icon: "🔁" },
-];
+type Props = {
+  summary: Summary | null;
+  loading?: boolean;
+};
 
-export default function BalanceCards() {
-  const [summary, setSummary] = useState<Summary | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchSummary() {
-      try {
-        const res = await fetch("/api/summary");
-        const data = await res.json();
-        setSummary(data);
-      } catch (err) {
-        console.error("Failed to fetch summary", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchSummary();
-  }, []);
+export default function BalanceCards({ summary, loading = false }: Props) {
+  const cards = [
+    { label: "Deposited", key: "deposited", icon: "💰" },
+    { label: "Profit", key: "profit", icon: "💹" },
+    { label: "Pending", key: "pending", icon: "🔁" },
+  ];
 
   return (
     <section className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 md:p-6">

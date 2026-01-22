@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Deposit: 'Deposit'
+  Deposit: 'Deposit',
+  Investment: 'Investment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -74,7 +75,10 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  name: 'name'
+  name: 'name',
+  balance: 'balance',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -98,6 +102,33 @@ export const DepositScalarFieldEnum = {
 } as const
 
 export type DepositScalarFieldEnum = (typeof DepositScalarFieldEnum)[keyof typeof DepositScalarFieldEnum]
+
+
+export const InvestmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  amount: 'amount',
+  currency: 'currency',
+  dailyRate: 'dailyRate',
+  duration: 'duration',
+  expectedProfit: 'expectedProfit',
+  totalReturn: 'totalReturn',
+  address: 'address',
+  reference: 'reference',
+  status: 'status',
+  txHash: 'txHash',
+  receivedAmount: 'receivedAmount',
+  providerPayload: 'providerPayload',
+  expiresAt: 'expiresAt',
+  startedAt: 'startedAt',
+  maturesAt: 'maturesAt',
+  createdAt: 'createdAt',
+  confirmedAt: 'confirmedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
 
 
 export const SortOrder = {
