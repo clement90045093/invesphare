@@ -201,27 +201,29 @@ export default function InvestmentPage() {
       }
     }
   };
+const confirmInvestment = async () => {
+  setError(null);
+  setLoading(true);
+  try {
+    const res = await fetch("/api/invest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, plan: selectedPlan }),
+    });
 
-  const confirmInvestment = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await fetch("/api/invest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency, plan: selectedPlan }),
-      });
-      if (!res.ok) throw new Error("Investment request failed");
-      const data = await res.json();
-      setDepositReference(data.reference || `INV-${Date.now()}`);
-      setDepositStatus("pending");
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : "Unknown error";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || "Investment request failed");
+
+    // Investment saved successfully → redirect to dashboard
+    router.push("/dashboard");
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : "Unknown error";
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const notifyAdmin = async () => {
     if (!depositReference) return;
