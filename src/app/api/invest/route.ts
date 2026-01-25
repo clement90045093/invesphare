@@ -6,7 +6,9 @@ import { createClient as createSupabaseClient } from "../../../utils/superbase/s
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { amount, currency, plan } = body || {};
+    console.log("[v0] Invest API received body:", JSON.stringify(body, null, 2));
+    const { amount, currency, plan, dailyRate, duration, expectedProfit, totalReturn, address } = body || {};
+    console.log("[v0] Parsed values:", { dailyRate, duration, expectedProfit, totalReturn, address });
 
     // get authenticated user from Supabase server client
     const supabase = await createSupabaseClient();
@@ -51,11 +53,11 @@ export async function POST(request: Request) {
         status: "pending",
         reference,
         createdAt: new Date(),
-        dailyRate: 0,          // set default or plan-based value
-    duration: 0,           // plan duration in days
-    expectedProfit: 0,     // calculated profit
-    totalReturn: 0,        // amount + expectedProfit
-    address: "", 
+        dailyRate: Number(dailyRate) || 0,
+        duration: Number(duration) || 0,
+        expectedProfit: Number(expectedProfit) || 0,
+        totalReturn: Number(totalReturn) || 0,
+        address: address || "",
       },
     });
 

@@ -208,7 +208,16 @@ const confirmInvestment = async () => {
     const res = await fetch("/api/invest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, plan: selectedPlan }),
+      body: JSON.stringify({
+        amount,
+        currency,
+        plan: selectedPlan,
+        dailyRate: plan.rate,
+        duration: plan.days,
+        expectedProfit: totalProfit,
+        totalReturn,
+        address: walletAddress,
+      }),
     });
 
     const data = await res.json();
