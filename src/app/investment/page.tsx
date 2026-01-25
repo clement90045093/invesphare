@@ -19,7 +19,6 @@ import {
   CircleDot,
   Circle,
   Loader2,
-  Wallet,
   Copy,
   AlertCircle,
   ShieldCheck,
@@ -201,38 +200,39 @@ export default function InvestmentPage() {
       }
     }
   };
-const confirmInvestment = async () => {
-  setError(null);
-  setLoading(true);
-  try {
-    const res = await fetch("/api/invest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount,
-        currency,
-        plan: selectedPlan,
-        dailyRate: plan.rate,
-        duration: plan.days,
-        expectedProfit: totalProfit,
-        totalReturn,
-        address: walletAddress,
-      }),
-    });
 
-    const data = await res.json();
+  const confirmInvestment = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/invest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount,
+          currency,
+          plan: selectedPlan,
+          dailyRate: plan.rate,
+          duration: plan.days,
+          expectedProfit: totalProfit,
+          totalReturn,
+          address: walletAddress,
+        }),
+      });
 
-    if (!res.ok) throw new Error(data.message || "Investment request failed");
+      const data = await res.json();
 
-    // Investment saved successfully → redirect to dashboard
-    router.push("/dashboard");
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    setError(message);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (!res.ok) throw new Error(data.message || "Investment request failed");
+
+      // Investment saved successfully → redirect to dashboard
+      router.push("/dashboard");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Unknown error";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const notifyAdmin = async () => {
     if (!depositReference) return;
@@ -274,10 +274,6 @@ const confirmInvestment = async () => {
       setDepositStatus("rejected");
       setIsPolling(false);
     }
-  };
-
-  const confirmDeposit = () => {
-    confirmInvestment();
   };
 
   return (
@@ -598,6 +594,13 @@ const confirmInvestment = async () => {
                   transactions are encrypted and monitored 24/7.
                 </p>
               </div>
+
+              {error && (
+                <div className="flex items-start gap-3 rounded-lg border border-destructive/20 bg-destructive/5 p-4">
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
+                  <p className="text-sm text-foreground">{error}</p>
+                </div>
+              )}
 
               <Button
                 onClick={confirmInvestment}

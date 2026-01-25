@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,10 +47,10 @@ function StepIndicator({
       <div
         className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300 ${
           isCompleted
-            ? "border-primary bg-primary text-primary-foreground"
+            ? "border-emerald-500 bg-emerald-500 text-white"
             : isActive
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border bg-secondary text-muted-foreground"
+              ? "border-emerald-500 bg-emerald-500/10 text-emerald-500"
+              : "border-gray-700 bg-[#1C2541] text-gray-500"
         }`}
       >
         {isCompleted ? (
@@ -64,7 +63,7 @@ function StepIndicator({
       </div>
       <span
         className={`text-sm font-medium transition-colors ${
-          isActive ? "text-foreground" : "text-muted-foreground"
+          isActive ? "text-white" : "text-gray-500"
         }`}
       >
         {label}
@@ -206,7 +205,7 @@ export default function DepositPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0B132B]">
       {isPolling && depositReference && (
         <PollingStatus
           reference={depositReference}
@@ -218,26 +217,26 @@ export default function DepositPage() {
       <div className="mx-auto max-w-3xl px-4 py-8 md:py-12">
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2">
-            <Wallet className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-primary">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2">
+            <Wallet className="h-5 w-5 text-emerald-500" />
+            <span className="text-sm font-medium text-emerald-500">
               Secure Deposit
             </span>
           </div>
-          <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+          <h1 className="mb-2 text-3xl font-bold tracking-tight text-white md:text-4xl">
             Deposit Funds
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-400">
             Add funds to your investment account securely
           </p>
         </div>
 
         {/* Step Indicators */}
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center md:p-6">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-gray-800 bg-[#0D1B2A] p-4 sm:flex-row sm:items-center md:p-6">
           <StepIndicator step={1} currentStep={currentStep} label="Amount" />
-          <div className="hidden h-px flex-1 bg-border sm:block" />
+          <div className="hidden h-px flex-1 bg-gray-800 sm:block" />
           <StepIndicator step={2} currentStep={currentStep} label="Payment" />
-          <div className="hidden h-px flex-1 bg-border sm:block" />
+          <div className="hidden h-px flex-1 bg-gray-800 sm:block" />
           <StepIndicator
             step={3}
             currentStep={currentStep}
@@ -246,22 +245,22 @@ export default function DepositPage() {
         </div>
 
         {/* Main Content */}
-        <Card className="border-border bg-card">
+        <div className="rounded-xl border border-gray-800 bg-[#0D1B2A]">
           {/* Step 1: Amount Selection */}
           {currentStep === 1 && (
             <>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-card-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+              <div className="border-b border-gray-800 p-6">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-500">
                     1
                   </span>
                   Select amount & currency
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </h2>
+              </div>
+              <div className="space-y-6 p-6">
                 {/* Quick Amount Buttons */}
                 <div>
-                  <Label className="mb-3 block text-sm text-muted-foreground">
+                  <Label className="mb-3 block text-sm text-gray-400">
                     Quick select
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -271,7 +270,11 @@ export default function DepositPage() {
                         variant={amount === quickAmount ? "default" : "outline"}
                         size="sm"
                         onClick={() => setAmount(quickAmount)}
-                        className="min-w-[80px]"
+                        className={`min-w-[80px] ${
+                          amount === quickAmount
+                            ? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600"
+                            : "bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
+                        }`}
                       >
                         ${quickAmount}
                       </Button>
@@ -282,14 +285,14 @@ export default function DepositPage() {
                 {/* Custom Amount */}
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
-                    <Label htmlFor="amount" className="mb-2 block text-foreground">
+                    <Label htmlFor="amount" className="mb-2 block text-white">
                       Amount (USD){" "}
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-gray-500">
                         (min ${MIN_DEPOSIT})
                       </span>
                     </Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                         $
                       </span>
                       <Input
@@ -297,52 +300,59 @@ export default function DepositPage() {
                         type="number"
                         value={amount}
                         onChange={(e) => setAmount(Number(e.target.value))}
-                        className="bg-input pl-8 text-foreground"
+                        className="bg-[#1C2541] border-gray-700 pl-8 text-white focus:border-emerald-500 focus:ring-emerald-500"
                         min={MIN_DEPOSIT}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="currency" className="mb-2 block text-foreground">
+                    <Label htmlFor="currency" className="mb-2 block text-white">
                       Currency
                     </Label>
                     <Select value={currency} onValueChange={setCurrency}>
-                      <SelectTrigger id="currency" className="bg-input text-foreground">
+                      <SelectTrigger id="currency" className="bg-[#1C2541] border-gray-700 text-white">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USDT-TRC20">USDT (TRC20)</SelectItem>
-                        <SelectItem value="USDT-ERC20">USDT (ERC20)</SelectItem>
-                        <SelectItem value="BTC">Bitcoin (BTC)</SelectItem>
+                      <SelectContent className="bg-[#1C2541] border-gray-700">
+                        <SelectItem value="USDT-TRC20" className="text-white hover:bg-gray-800">USDT (TRC20)</SelectItem>
+                        <SelectItem value="USDT-ERC20" className="text-white hover:bg-gray-800">USDT (ERC20)</SelectItem>
+                        <SelectItem value="BTC" className="text-white hover:bg-gray-800">Bitcoin (BTC)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
 
                 {/* Summary */}
-                <div className="rounded-lg bg-secondary/50 p-4">
+                <div className="rounded-lg bg-[#1C2541] p-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">You deposit</span>
-                    <span className="text-lg font-semibold text-foreground">
+                    <span className="text-gray-400">You deposit</span>
+                    <span className="text-lg font-semibold text-white">
                       ${amount.toLocaleString()} {currency.split("-")[0]}
                     </span>
                   </div>
                 </div>
 
                 {/* Security Note */}
-                <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
-                  <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex items-start gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
+                  <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                  <p className="text-sm text-gray-400">
                     Your deposit is protected by our secure payment system. All
                     transactions are encrypted and monitored 24/7.
                   </p>
                 </div>
 
+                {error && (
+                  <div className="flex items-center gap-2 rounded-lg bg-red-500/10 p-3 text-sm text-red-400">
+                    <AlertCircle className="h-4 w-4" />
+                    {error}
+                  </div>
+                )}
+
                 <Button
                   onClick={confirmDeposit}
                   disabled={loading || amount < MIN_DEPOSIT}
-                  className="w-full"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   size="lg"
                 >
                   {loading ? (
@@ -357,41 +367,41 @@ export default function DepositPage() {
                     </>
                   )}
                 </Button>
-              </CardContent>
+              </div>
             </>
           )}
 
           {/* Step 2: Payment */}
           {currentStep === 2 && depositStatus === "pending" && !isPolling && (
             <>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-card-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+              <div className="border-b border-gray-800 p-6">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-500">
                     2
                   </span>
                   Send your payment
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </h2>
+              </div>
+              <div className="space-y-6 p-6">
                 {/* Order Summary */}
-                <div className="rounded-lg bg-secondary p-4">
-                  <h3 className="mb-3 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                <div className="rounded-lg bg-[#1C2541] p-4">
+                  <h3 className="mb-3 text-sm font-medium uppercase tracking-wide text-gray-500">
                     Order Summary
                   </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Amount</span>
-                      <span className="font-medium text-foreground">
+                      <span className="text-gray-400">Amount</span>
+                      <span className="font-medium text-white">
                         ${amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Currency</span>
-                      <span className="font-medium text-foreground">{currency}</span>
+                      <span className="text-gray-400">Currency</span>
+                      <span className="font-medium text-white">{currency}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Reference</span>
-                      <span className="font-mono text-xs text-primary">
+                      <span className="text-gray-400">Reference</span>
+                      <span className="font-mono text-xs text-emerald-500">
                         {depositReference}
                       </span>
                     </div>
@@ -400,12 +410,12 @@ export default function DepositPage() {
 
                 {/* Wallet Address */}
                 <div>
-                  <Label className="mb-2 block text-sm text-muted-foreground">
+                  <Label className="mb-2 block text-sm text-gray-400">
                     Send exactly ${amount} to this wallet address
                   </Label>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 rounded-lg bg-secondary p-3">
-                      <code className="break-all text-sm text-foreground">
+                    <div className="flex-1 rounded-lg bg-[#1C2541] p-3">
+                      <code className="break-all text-sm text-white">
                         {walletAddress}
                       </code>
                     </div>
@@ -413,17 +423,17 @@ export default function DepositPage() {
                       variant="outline"
                       size="icon"
                       onClick={copyToClipboard}
-                      className="shrink-0 bg-transparent"
+                      className="shrink-0 bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
                     >
                       {copied ? (
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                       ) : (
                         <Copy className="h-4 w-4" />
                       )}
                     </Button>
                   </div>
                   {copied && (
-                    <p className="mt-2 text-xs text-primary">
+                    <p className="mt-2 text-xs text-emerald-500">
                       Address copied to clipboard!
                     </p>
                   )}
@@ -433,10 +443,10 @@ export default function DepositPage() {
                 <div className="flex items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4">
                   <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-sm font-medium text-white">
                       Important
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-gray-400">
                       Only send {currency.split("-")[0]} on the{" "}
                       {currency.includes("-") ? currency.split("-")[1] : currency}{" "}
                       network. Sending other assets may result in permanent loss.
@@ -444,10 +454,17 @@ export default function DepositPage() {
                   </div>
                 </div>
 
+                {error && (
+                  <div className="flex items-center gap-2 rounded-lg bg-red-500/10 p-3 text-sm text-red-400">
+                    <AlertCircle className="h-4 w-4" />
+                    {error}
+                  </div>
+                )}
+
                 <Button
                   onClick={notifyAdmin}
                   disabled={loading}
-                  className="w-full"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                   size="lg"
                 >
                   {loading ? (
@@ -462,132 +479,134 @@ export default function DepositPage() {
                     </>
                   )}
                 </Button>
-              </CardContent>
+              </div>
             </>
           )}
 
           {/* Step 3: Awaiting Confirmation */}
           {isPolling && depositStatus === "pending" && (
             <>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-card-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+              <div className="border-b border-gray-800 p-6">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-500">
                     3
                   </span>
                   Awaiting confirmation
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </h2>
+              </div>
+              <div className="space-y-6 p-6">
                 <div className="flex flex-col items-center py-8 text-center">
-                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                    <Clock className="h-10 w-10 animate-pulse text-primary" />
+                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/10">
+                    <Clock className="h-10 w-10 animate-pulse text-emerald-500" />
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold text-foreground">
+                  <h3 className="mb-2 text-xl font-semibold text-white">
                     Payment verification in progress
                   </h3>
-                  <p className="max-w-sm text-muted-foreground">
+                  <p className="max-w-sm text-gray-400">
                     We are verifying your payment. This usually takes a few
                     minutes. Please do not close this page.
                   </p>
                 </div>
 
-                <div className="rounded-lg bg-secondary p-4">
+                <div className="rounded-lg bg-[#1C2541] p-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Reference</span>
-                    <span className="font-mono text-xs text-primary">
+                    <span className="text-gray-400">Reference</span>
+                    <span className="font-mono text-xs text-emerald-500">
                       {depositReference}
                     </span>
                   </div>
                   <div className="mt-2 flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Amount</span>
-                    <span className="font-medium text-foreground">
+                    <span className="text-gray-400">Amount</span>
+                    <span className="font-medium text-white">
                       ${amount.toLocaleString()} {currency.split("-")[0]}
                     </span>
                   </div>
                   <div className="mt-2 flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Status</span>
+                    <span className="text-gray-400">Status</span>
                     <span className="flex items-center gap-1.5 font-medium text-amber-500">
                       <Loader2 className="h-3 w-3 animate-spin" />
                       Verifying
                     </span>
                   </div>
                 </div>
-              </CardContent>
+              </div>
             </>
           )}
 
           {/* Success State */}
           {depositStatus === "approved" && (
             <>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-card-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+              <div className="border-b border-gray-800 p-6">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
                     <CheckCircle2 className="h-4 w-4" />
                   </span>
                   Deposit confirmed
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h2>
+              </div>
+              <div className="p-6">
                 <div className="flex flex-col items-center py-8 text-center">
-                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary">
-                    <CheckCircle2 className="h-10 w-10 text-primary-foreground" />
+                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500">
+                    <CheckCircle2 className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold text-foreground">
+                  <h3 className="mb-2 text-xl font-semibold text-white">
                     Payment successful!
                   </h3>
-                  <p className="max-w-sm text-muted-foreground">
-                    Your deposit of ${amount.toLocaleString()} has been
-                    confirmed. Redirecting to your investment dashboard...
+                  <p className="max-w-sm text-gray-400">
+                    Your deposit of ${amount.toLocaleString()} has been confirmed.
+                    Redirecting you to investments...
                   </p>
                 </div>
-              </CardContent>
+              </div>
             </>
           )}
 
           {/* Rejected State */}
           {depositStatus === "rejected" && (
             <>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl text-destructive">
-                  <AlertCircle className="h-6 w-6" />
+              <div className="border-b border-gray-800 p-6">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
+                    <AlertCircle className="h-4 w-4" />
+                  </span>
                   Deposit rejected
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </h2>
+              </div>
+              <div className="p-6">
                 <div className="flex flex-col items-center py-8 text-center">
-                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-destructive/10">
-                    <AlertCircle className="h-10 w-10 text-destructive" />
+                  <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10">
+                    <AlertCircle className="h-10 w-10 text-red-500" />
                   </div>
-                  <h3 className="mb-2 text-xl font-semibold text-foreground">
+                  <h3 className="mb-2 text-xl font-semibold text-white">
                     Payment could not be verified
                   </h3>
-                  <p className="mb-6 max-w-sm text-muted-foreground">
-                    We were unable to verify your payment. Please contact
-                    support with your reference number for assistance.
+                  <p className="max-w-sm text-gray-400">
+                    Please contact support if you believe this is an error.
                   </p>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setDepositReference(null);
-                      setDepositStatus(null);
-                      setIsPolling(false);
-                    }}
-                  >
-                    Try again
-                  </Button>
                 </div>
-              </CardContent>
+                <Button
+                  onClick={() => {
+                    setDepositReference(null);
+                    setDepositStatus(null);
+                    setIsPolling(false);
+                  }}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  size="lg"
+                >
+                  Try again
+                </Button>
+              </div>
             </>
           )}
-        </Card>
+        </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-4">
-            <AlertCircle className="h-5 w-5 shrink-0 text-destructive" />
-            <p className="text-sm text-destructive">{error}</p>
-          </div>
-        )}
+        {/* Footer */}
+        <p className="mt-8 text-center text-xs text-gray-500">
+          Need help? Contact our{" "}
+          <a href="/support" className="text-emerald-500 hover:underline">
+            support team
+          </a>
+        </p>
       </div>
     </div>
   );

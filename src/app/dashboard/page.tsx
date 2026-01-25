@@ -1,10 +1,9 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import BalanceCards from "./components/BalanceCards";
-import RecentTransactions from "./components/RecentTransactions";
+import ActiveInvestments from "./components/RecentTransactions";
 import {
   FiHome,
   FiUser,
@@ -16,23 +15,46 @@ import {
 } from "react-icons/fi";
 import { MdOutlineLogout } from "react-icons/md";
 
+interface Investment {
+  id: string;
+  plan: string;
+  amount: number;
+  currency: string;
+  status: string;
+  reference: string;
+  createdAt: string;
+  dailyRate: number;
+  duration: number;
+  expectedProfit: number;
+  totalReturn: number;
+  address: string;
+}
+
 export default function DashboardPage() {
   const [active, setActive] = useState("Dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [summary, setSummary] = useState<any>(null);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [summary, setSummary] = useState<{
+    deposited: number;
+    pendingCount: number;
+    profit: number;
+  } | null>(null);
+  const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch(`/api/dashboard`);
+        const res = await fetch("/api/dashboard");
         if (!res.ok) throw new Error("Failed to fetch dashboard");
         const json = await res.json();
         if (!mounted) return;
-        setSummary({ deposited: json.deposited, pendingCount: json.pendingCount });
-        setTransactions(json.recentTransactions || []);
+        setSummary({
+          deposited: json.deposited,
+          pendingCount: json.pendingCount,
+          profit: json.profit,
+        });
+        setInvestments(json.investments || []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -65,7 +87,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#0B132B] text-white">
-      {/* ===== Sidebar ===== */}
+      {/* Sidebar */}
       <aside
         className={`fixed md:static top-0 left-0 h-full w-64 bg-[#0D1B2A] border-r border-gray-800 flex flex-col z-50 transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
@@ -73,10 +95,11 @@ export default function DashboardPage() {
         <div className="p-5 text-lg font-semibold border-b border-gray-800 flex justify-between items-center">
           investSphere.com
           <button
+            type="button"
             onClick={() => setSidebarOpen(false)}
             className="md:hidden text-gray-400 hover:text-white"
           >
-            ✖
+            X
           </button>
         </div>
 
@@ -89,13 +112,16 @@ export default function DashboardPage() {
                 return (
                   <div key={item.name}>
                     <button
+                      type="button"
                       onClick={() => {
                         setOpenSubmenus((s) => ({ ...s, [item.name]: !s[item.name] }));
                         setActive(item.name);
                         setSidebarOpen(false);
                       }}
                       className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition ${
-                        active === item.name ? "bg-emerald-600 text-white" : "text-gray-300 hover:bg-gray-800"
+                        active === item.name
+                          ? "bg-emerald-600 text-white"
+                          : "text-gray-300 hover:bg-gray-800"
                       }`}
                     >
                       {item.icon}
@@ -103,7 +129,7 @@ export default function DashboardPage() {
                     </button>
                     {isOpen && (
                       <div className="pl-6 flex flex-col">
-                        {item.children.map((c: any) => (
+                        {item.children.map((c) => (
                           <Link
                             key={c.name}
                             href={c.path}
@@ -111,7 +137,7 @@ export default function DashboardPage() {
                               setActive(c.name);
                               setSidebarOpen(false);
                             }}
-                            className={`flex items-center gap-3 px-3 py-2 rounded-md transition text-gray-300 hover:bg-gray-800`}
+                            className="flex items-center gap-3 px-3 py-2 rounded-md transition text-gray-300 hover:bg-gray-800"
                           >
                             <span>{c.name}</span>
                           </Link>
@@ -141,6 +167,7 @@ export default function DashboardPage() {
                 </Link>
               ) : (
                 <button
+                  type="button"
                   key={item.name}
                   onClick={() => {
                     setActive(item.name);
@@ -161,36 +188,41 @@ export default function DashboardPage() {
         </div>
       </aside>
 
-      {/* ===== Main Content ===== */}
+      {/* Main Content */}
       <main className="flex-1 flex flex-col md:ml-0">
         {/* Top Navbar */}
         <header className="flex justify-between items-center px-4 md:px-6 py-3 border-b border-gray-800 bg-[#0D1B2A] sticky top-0 z-40">
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => setSidebarOpen(true)}
               className="md:hidden text-gray-300 hover:text-white"
             >
               <FiMenu size={24} />
             </button>
-            <h2 className="text-gray-300 text-sm md:text-base">
-              Welcome, Investor 👋
-            </h2>
+            <h2 className="text-gray-300 text-sm md:text-base">Welcome, Investor</h2>
           </div>
           <div className="flex items-center gap-4 text-gray-400">
-            <button className="hover:text-white">🔔</button>
-            <button className="hover:text-white">👤</button>
+            <button type="button" className="hover:text-white">
+              <span className="sr-only">Notifications</span>
+              <FiActivity />
+            </button>
+            <button type="button" className="hover:text-white">
+              <span className="sr-only">Profile</span>
+              <FiUser />
+            </button>
           </div>
         </header>
 
         {/* Summary Cards */}
-       <BalanceCards summary={summary} loading={loading} />
-        {/* Chart and Forex sections removed per request */}
+        <BalanceCards summary={summary} loading={loading} />
 
-        <RecentTransactions transactions={transactions} />
+        {/* Active Investments */}
+        <ActiveInvestments investments={investments} loading={loading} />
 
         {/* Footer */}
-        <footer className="text-gray-500 text-[10px] md:text-xs text-center py-4 border-t border-gray-800">
-          © 2017–{new Date().getFullYear()} InvestSphere.com. All Rights Reserved.
+        <footer className="mt-auto text-gray-500 text-[10px] md:text-xs text-center py-4 border-t border-gray-800">
+          &copy; 2017&ndash;{new Date().getFullYear()} InvestSphere.com. All Rights Reserved.
         </footer>
       </main>
     </div>
