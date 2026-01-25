@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavWrapper from "../components/NavWrapper";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 import { createClient } from "@/utils/superbase/server";
 
 const geistSans = Geist({
@@ -22,20 +22,29 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const  supabase =  await createClient()
-  const  {data:{user}} =  await  supabase.auth.getUser()
+}) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  console.log("user data", user)
+  console.log("user data", user);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Navbar (fixed / sticky) */}
         <NavWrapper />
-        {children}
+
+        {/* Page content pushed BELOW navbar */}
+        <main className="pt-16 min-h-screen">
+          {children}
+        </main>
+
         <Toaster />
       </body>
     </html>
