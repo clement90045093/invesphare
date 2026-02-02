@@ -1,14 +1,18 @@
 'use client';
 
-import React from "react"
-
+import React from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Loader2, CheckCircle } from 'lucide-react';
+import {
+  Wallet,
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  AlertCircle,
+  ShieldCheck,
+} from 'lucide-react';
 
 interface WithdrawalFormProps {
   onSuccess: (data: { amount: number; walletAddress: string; email: string }) => void;
@@ -16,6 +20,7 @@ interface WithdrawalFormProps {
 
 const MIN_WITHDRAWAL = 10;
 const MAX_WITHDRAWAL = 10000;
+const QUICK_AMOUNTS = [50, 100, 250, 500, 1000];
 
 export default function WithdrawalForm({ onSuccess }: WithdrawalFormProps) {
   const [amount, setAmount] = useState('');
@@ -23,7 +28,6 @@ export default function WithdrawalForm({ onSuccess }: WithdrawalFormProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
   const validateForm = () => {
     setError('');
@@ -48,14 +52,11 @@ export default function WithdrawalForm({ onSuccess }: WithdrawalFormProps) {
       setError(`Maximum withdrawal amount is $${MAX_WITHDRAWAL}`);
       return false;
     }
-const isEthereum = /^0x[a-fA-F0-9]{40}$/.test(walletAddress);
-const isBitcoin = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/.test(walletAddress);
-const isTron = /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(walletAddress);
 
-if (!isEthereum && !isBitcoin && !isTron) {
-  setError("Please enter a valid crypto wallet address");
-  return false;
-}
+    if (!walletAddress.match(/^0x[a-fA-F0-9]{40}$/) && !walletAddress.match(/^bc1/)) {
+      setError('Please enter a valid crypto wallet address');
+      return false;
+    }
 
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       setError('Please enter a valid email address');
@@ -93,7 +94,6 @@ if (!isEthereum && !isBitcoin && !isTron) {
         return;
       }
 
-      setSuccess(true);
       setTimeout(() => {
         onSuccess({
           amount: parseFloat(amount),
@@ -108,118 +108,180 @@ if (!isEthereum && !isBitcoin && !isTron) {
   };
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Withdraw Funds</CardTitle>
-        <CardDescription>
-          Withdraw your funds to your cryptocurrency wallet
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Amount Field */}
-          <div className="space-y-2">
-            <Label htmlFor="amount">Withdrawal Amount (USD)</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                $
+    <div className="min-h-screen bg-[#0B132B]">
+      <div className="mx-auto max-w-3xl px-4 py-8 md:py-12">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2">
+            <Wallet className="h-5 w-5 text-emerald-500" />
+            <span className="text-sm font-medium text-emerald-500">
+              Secure Withdrawal
+            </span>
+          </div>
+          <h1 className="mb-2 text-3xl font-bold tracking-tight text-white md:text-4xl">
+            Withdraw Funds
+          </h1>
+          <p className="text-gray-400">
+            Withdraw your funds to your cryptocurrency wallet
+          </p>
+        </div>
+
+        {/* Main Card */}
+        <div className="rounded-xl border border-gray-800 bg-[#0D1B2A]">
+          <div className="border-b border-gray-800 p-6">
+            <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-sm font-bold text-emerald-500">
+                1
               </span>
+              Enter withdrawal details
+            </h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6 p-6">
+            {/* Quick Amount Buttons */}
+            <div>
+              <Label className="mb-3 block text-sm text-gray-400">
+                Quick select
+              </Label>
+              <div className="flex flex-wrap gap-2">
+                {QUICK_AMOUNTS.map((quickAmount) => (
+                  <Button
+                    key={quickAmount}
+                    type="button"
+                    onClick={() => setAmount(quickAmount.toString())}
+                    variant={amount === quickAmount.toString() ? 'default' : 'outline'}
+                    size="sm"
+                    className={`min-w-[80px] ${
+                      amount === quickAmount.toString()
+                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600'
+                        : 'bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white'
+                    }`}
+                  >
+                    ${quickAmount}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Amount Field */}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <Label htmlFor="amount" className="mb-2 block text-white">
+                  Withdrawal Amount (USD)
+                  <span className="text-xs text-gray-500">
+                    {' '}
+                    (min ${MIN_WITHDRAWAL} - max ${MAX_WITHDRAWAL})
+                  </span>
+                </Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                    $
+                  </span>
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="Enter amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    step="0.01"
+                    min={MIN_WITHDRAWAL}
+                    max={MAX_WITHDRAWAL}
+                    className="bg-[#1C2541] border-gray-700 pl-8 text-white focus:border-emerald-500 focus:ring-emerald-500"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <Label htmlFor="email" className="mb-2 block text-white">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-[#1C2541] border-gray-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            {/* Wallet Address Field */}
+            <div>
+              <Label htmlFor="wallet" className="mb-2 block text-white">
+                Crypto Wallet Address
+              </Label>
               <Input
-                id="amount"
-                type="number"
-                placeholder="Enter amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                step="0.01"
-                min={MIN_WITHDRAWAL}
-                max={MAX_WITHDRAWAL}
-                className="pl-7"
+                id="wallet"
+                type="text"
+                placeholder="0x... or bc1..."
+                value={walletAddress}
+                onChange={(e) => setWalletAddress(e.target.value)}
+                className="bg-[#1C2541] border-gray-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
                 disabled={loading}
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Ethereum (0x) or Bitcoin (bc1) address
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Min: ${MIN_WITHDRAWAL} | Max: ${MAX_WITHDRAWAL}
-            </p>
-          </div>
 
-          {/* Wallet Address Field */}
-          <div className="space-y-2">
-            <Label htmlFor="wallet">Crypto Wallet Address</Label>
-            <Input
-              id="wallet"
-              type="text"
-              placeholder="0x... or bc1..."
-              value={walletAddress}
-              onChange={(e) => setWalletAddress(e.target.value)}
-              disabled={loading}
-            />
-            <p className="text-xs text-muted-foreground">
-              Ethereum (0x) or Bitcoin (bc1) address
-            </p>
-          </div>
+            {/* Summary */}
+            <div className="rounded-lg bg-[#1C2541] p-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-400">You withdraw</span>
+                <span className="text-lg font-semibold text-white">
+                  {amount ? `$${parseFloat(amount).toLocaleString()}` : '$0.00'}
+                </span>
+              </div>
+            </div>
 
-          {/* Email Field */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-            />
-            <p className="text-xs text-muted-foreground">
-              Confirmation will be sent to this email
-            </p>
-          </div>
+            {/* Security Note */}
+            <div className="flex items-start gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+              <p className="text-sm text-gray-400">
+                Your withdrawal request will be reviewed by our team. You'll receive
+                notifications via Telegram and email once approved.
+              </p>
+            </div>
 
-          {/* Error Alert */}
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {/* Success State */}
-          {success && (
-            <Alert className="border-green-200 bg-green-50">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-800">
-                Withdrawal request submitted successfully!
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={loading || success}
-            className="w-full"
-            size="lg"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : success ? (
-              <>
-                <CheckCircle className="mr-2 h-4 w-4" />
-                Success
-              </>
-            ) : (
-              'Withdraw Now'
+            {/* Error Alert */}
+            {error && (
+              <div className="flex items-center gap-2 rounded-lg bg-red-500/10 p-3 text-sm text-red-400">
+                <AlertCircle className="h-4 w-4" />
+                {error}
+              </div>
             )}
-          </Button>
 
-          {/* Disclaimer */}
-          <p className="text-xs text-muted-foreground text-center">
-            By confirming, you agree to withdraw funds to the provided wallet address.
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={loading || !amount || !walletAddress || !email}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+              size="lg"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Withdraw Now
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+
+            {/* Disclaimer */}
+            <p className="text-xs text-gray-500 text-center">
+              By confirming, you agree to withdraw funds to the provided wallet address.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

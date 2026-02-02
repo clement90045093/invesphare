@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-interface SendWithdrawalEmailProps {
+interface WithdrawalEmailParams {
   email: string;
   amount: number;
   walletAddress: string;
@@ -14,7 +14,7 @@ export async function sendWithdrawalEmail({
   amount,
   walletAddress,
   transactionId,
-}: SendWithdrawalEmailProps) {
+}: WithdrawalEmailParams) {
   try {
     if (!process.env.RESEND_API_KEY) {
       console.error('RESEND_API_KEY is not set');
@@ -22,7 +22,7 @@ export async function sendWithdrawalEmail({
     }
 
     const result = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'noreply@example.com',
+      from: process.env.RESEND_FROM_EMAIL || 'noreply@investsphare.com',
       to: email,
       subject: `Withdrawal Confirmation - ${amount} USD`,
       html: `
@@ -134,7 +134,7 @@ export async function sendWithdrawalEmail({
                 <p>If you have any questions or concerns, please contact our support team.</p>
               </div>
               <div class="footer">
-                <p>&copy; 2025 Your Company. All rights reserved.</p>
+                <p>&copy; 2025 InvestSphare. All rights reserved.</p>
                 <p>This is an automated message, please do not reply to this email.</p>
               </div>
             </div>
