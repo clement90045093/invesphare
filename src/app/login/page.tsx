@@ -3,8 +3,7 @@
 import Image from "next/image";
 import image1 from "../../../public/ChatGPT_Image_Oct_17__2025__01_22_02_PM-removebg-preview.png";
 import Link from "next/link";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { LoginActions } from "@/components/actions/LoginAction";
 import { useAuthStore } from "@/store/AuthStore";
 
-
 // ------------------
 // ZOD VALIDATION SCHEMA
 // ------------------
@@ -21,11 +19,27 @@ const loginSchema = z.object({
   email: z.string().email("Enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
-type LoginFormData = z.infer<typeof loginSchema>
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-const router = useRouter()
+  const router = useRouter();
+
+  const { user, authState } = useAuthStore((state) => state);
+
+  // ✅ Check auth on mount
+  useEffect(() => {
+    authState();
+  }, [authState]);
+
+  // ✅ Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
   const {
     register,
     handleSubmit,
@@ -33,39 +47,35 @@ const router = useRouter()
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-const onSubmit = async (data: LoginFormData) => {
-  const userdata = {
-    email: data.email,
-    password: data.password,
-  };
 
-  try {
-    const createUser = await LoginActions(userdata);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const res = await LoginActions(data);
 
-    if (createUser?.status === "success") {
-      toast("Login Successful!", {
-        description: "Welcome back!",
-        style: { background: "#22c55e", color: "white" },
-      });
+      if (res?.status === "success") {
+        toast("Login Successful!", {
+          description: "Welcome back!",
+          style: { background: "#22c55e", color: "white" },
+        });
 
-      router.push("/");
-      return;
-    }
+        router.push("/dashboard");
+        return;
+      }
 
-    // Handle API-side error
-    if (createUser?.error) {
-      toast("Login Failed", {
-        description: createUser.error,
+      if (res?.error) {
+        toast("Login Failed", {
+          description: res.error,
+          style: { backgroundColor: "#ef4444", color: "white" },
+        });
+      }
+    } catch (error: any) {
+      toast("Login failed", {
+        description:
+          error?.message || "An unexpected error occurred. Please try again.",
         style: { backgroundColor: "#ef4444", color: "white" },
       });
     }
-  } catch (error: any) {
-    toast("Login failed", {
-      description: error?.message || "An unexpected error occurred. Please try again.",
-      style: { backgroundColor: "#ef4444", color: "white" },
-    });
-  }
-};
+  };
 
 
   return (

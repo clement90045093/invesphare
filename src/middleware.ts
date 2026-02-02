@@ -7,7 +7,8 @@ export async function middleware(request: NextRequest) {
   // ✅ Exclude Telegram webhook and any public API routes
   if (
     pathname.startsWith("/api/telegram/webhook") || 
-    pathname.startsWith("/api/deposit/notify")
+    pathname.startsWith("/api/deposit/notify") ||
+    pathname.startsWith("/")
   ) {
     return; // do not run auth middleware
   }

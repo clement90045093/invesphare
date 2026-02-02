@@ -1,26 +1,27 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-
-
+import Image from 'next/image';
 
 export default function Subbodyone() {
   return (
-    <section className="w-full text-gray-800 bg-white">
-      {/* ===== Top Green Banner Section ===== */}
-      <div className="bg-green-600 text-white px-6 md:px-20 py-12">
+    <section className="w-full bg-[#0B132B]">
+      {/* ===== Top Banner Section ===== */}
+      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-6 md:px-20 py-16">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 tracking-tight">
-              WHY TRADE WITH INVESTSPHERE
+            <p className="text-emerald-100 text-sm uppercase tracking-widest mb-3 font-semibold">
+              Why Choose Us
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+              Trade with Investsphere
             </h2>
-            <p className="text-base leading-relaxed opacity-90">
-              Since its establishment, Investsphere Live Trading has shown consistent and
-              remarkable results. Today, it’s recognized as one of the most successful
-              and dependable companies in the forex trading and investment industry.
+            <p className="text-base leading-relaxed opacity-95">
+              Since our establishment, Investsphere has delivered consistent and
+              remarkable results. Recognized as one of the most successful and dependable
+              investment companies in the forex and crypto trading industry.
             </p>
           </div>
-          <button className="mt-4 md:mt-0 bg-white text-green-700 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+          <button className="mt-4 md:mt-0 bg-white text-emerald-700 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition whitespace-nowrap">
             Read More
           </button>
         </div>
@@ -32,7 +33,7 @@ export default function Subbodyone() {
           <Image
             src={"/jakub-zerdzicki-eGI0aGwuE-A-unsplash.jpg"}
             alt="Investment workspace"
-            className="rounded-2xl shadow-lg object-cover"
+            className="rounded-2xl shadow-2xl object-cover border border-gray-800"
             width={520}
             height={420}
             priority
@@ -40,26 +41,26 @@ export default function Subbodyone() {
         </div>
 
         <div className="w-full md:w-1/2 space-y-6">
-          <p className="text-green-600 text-sm uppercase font-semibold tracking-widest">
-            Secured with the latest encryption technology
+          <p className="text-emerald-500 text-sm uppercase font-semibold tracking-widest">
+            Secured with Latest Encryption
           </p>
-          <h3 className="text-3xl font-bold text-gray-900">
+          <h3 className="text-4xl font-bold text-white">
             Investsphere
           </h3>
-          <p className="text-gray-600 leading-relaxed text-lg">
+          <p className="text-gray-400 leading-relaxed text-lg">
             Experience the best in asset management and financial innovation.
-            We’re dedicated to meeting our clients’ needs and ensuring your security at
+            We're dedicated to meeting our clients' needs and ensuring your security at
             every step.
           </p>
-          <p className="text-gray-600 leading-relaxed text-lg">
+          <p className="text-gray-400 leading-relaxed text-lg">
             All forex transactions are executed quickly, safely, and securely — with
             instant withdrawals and verified payment options.
           </p>
           <div className="flex gap-4 mt-6">
-            <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+            <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition">
               Read More
             </button>
-            <button className="border border-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+            <button className="border border-gray-700 hover:border-emerald-500 text-gray-400 hover:text-white px-8 py-3 rounded-lg font-semibold transition">
               Contact Us
             </button>
           </div>
@@ -67,56 +68,104 @@ export default function Subbodyone() {
       </div>
 
       {/* ===== Investment Plans Section ===== */}
-      <div className="bg-gray-50 py-20 px-6 md:px-20 text-center">
-        <h2 className="text-3xl font-bold text-gray-900">
-          Our Investment Plans
+      <div className="bg-[#0D1B2A] py-20 px-6 md:px-20 text-center">
+        <h2 className="text-4xl font-bold text-white mb-3">
+          Investment Plans
         </h2>
-        <div className="w-24 h-1 bg-green-600 mx-auto my-5"></div>
+        <p className="text-gray-400 mb-2">Choose the plan that fits your goals</p>
+        <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 to-emerald-600 mx-auto my-6 rounded-full" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {/* Starter Plan */}
-          <div className="bg-white rounded-2xl shadow-md p-10 hover:shadow-xl transition border border-gray-100">
-            <div className="flex justify-center mb-5">
-              <Image src={"/invest1.webp"} alt="Starter plan" width={60} height={60} className="rounded-full" />
+          <div className="group relative rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 border border-gray-800 hover:border-emerald-500/50 bg-[#0B132B]">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+            <div className="relative z-10">
+              <div className="flex justify-center mb-5">
+                <Image src={"/invest1.webp"} alt="Starter plan" width={60} height={60} className="rounded-full ring-2 ring-emerald-500/30" />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-4 text-white">Starter</h3>
+              <div className="space-y-3 text-gray-400 text-sm leading-relaxed">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Daily Profit</span>
+                  <span className="text-emerald-500 font-semibold">2%</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Min Deposit</span>
+                  <span className="text-white font-semibold">$100</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Max Deposit</span>
+                  <span className="text-white font-semibold">$4,999</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Duration</span>
+                  <span className="text-white font-semibold">5 Days</span>
+                </div>
+                <p className="text-emerald-500 font-semibold pt-2">Instant Withdrawal</p>
+              </div>
             </div>
-            <h3 className="text-lg font-semibold uppercase mb-4 text-gray-800">Starter Plan</h3>
-            <p className="text-gray-600 leading-relaxed text-sm">
-              Profit - 2% Daily for 5 Days <br />
-              Minimum Deposit - $100.00 <br />
-              Max Deposit - $4,999.00 <br />
-              Payment Options: BTC, ETH, USDT, LTC, BCH <br />
-              <span className="text-green-600 font-semibold">Instant Withdrawal</span>
-            </p>
           </div>
 
           {/* Professional Plan */}
-          <div className="bg-white rounded-2xl shadow-md p-10 hover:shadow-xl transition border border-gray-100">
-            <div className="flex justify-center mb-5">
-              <Image src={"/invest2.webp"} alt="Professional plan" width={60} height={60} className="rounded-full" />
+          <div className="group relative rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 border border-emerald-500/30 bg-gradient-to-br from-[#0B132B] to-[#0D1B2A] ring-2 ring-emerald-500/20 transform md:scale-105">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">
+              Popular
             </div>
-            <h3 className="text-lg font-semibold uppercase mb-4 text-gray-800">Professional Plan</h3>
-            <p className="text-gray-600 leading-relaxed text-sm">
-              Profit - 5% Daily for 5 Days <br />
-              Minimum Deposit - $5,000.00 <br />
-              Max Deposit - $9,999.00 <br />
-              Payment Options: BTC, ETH, USDT, LTC, BCH <br />
-              <span className="text-green-600 font-semibold">Instant Withdrawal</span>
-            </p>
+            <div className="relative z-10">
+              <div className="flex justify-center mb-5">
+                <Image src={"/invest2.webp"} alt="Professional plan" width={60} height={60} className="rounded-full ring-2 ring-emerald-500/50" />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-4 text-white">Professional</h3>
+              <div className="space-y-3 text-gray-400 text-sm leading-relaxed">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Daily Profit</span>
+                  <span className="text-emerald-500 font-semibold">5%</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Min Deposit</span>
+                  <span className="text-white font-semibold">$5,000</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Max Deposit</span>
+                  <span className="text-white font-semibold">$9,999</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Duration</span>
+                  <span className="text-white font-semibold">5 Days</span>
+                </div>
+                <p className="text-emerald-500 font-semibold pt-2">Instant Withdrawal</p>
+              </div>
+            </div>
           </div>
 
           {/* Premium Plan */}
-          <div className="bg-white rounded-2xl shadow-md p-10 hover:shadow-xl transition border border-gray-100">
-            <div className="flex justify-center mb-5">
-              <Image src={"/invest3.webp"} alt="Premium plan" width={60} height={60} className="rounded-full" />
+          <div className="group relative rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 border border-gray-800 hover:border-emerald-500/50 bg-[#0B132B]">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+            <div className="relative z-10">
+              <div className="flex justify-center mb-5">
+                <Image src={"/invest3.webp"} alt="Premium plan" width={60} height={60} className="rounded-full ring-2 ring-emerald-500/30" />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-4 text-white">Premium</h3>
+              <div className="space-y-3 text-gray-400 text-sm leading-relaxed">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Daily Profit</span>
+                  <span className="text-emerald-500 font-semibold">7%</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Min Deposit</span>
+                  <span className="text-white font-semibold">$10,000</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Max Deposit</span>
+                  <span className="text-white font-semibold">Unlimited</span>
+                </div>
+                <div className="flex justify-between items-center pb-2 border-b border-gray-800">
+                  <span>Duration</span>
+                  <span className="text-white font-semibold">5 Days</span>
+                </div>
+                <p className="text-emerald-500 font-semibold pt-2">Instant Withdrawal</p>
+              </div>
             </div>
-            <h3 className="text-lg font-semibold uppercase mb-4 text-gray-800">Premium Plan</h3>
-            <p className="text-gray-600 leading-relaxed text-sm">
-              Profit - 7% Daily for 5 Days <br />
-              Minimum Deposit - $10,000.00 <br />
-              Max Deposit - Unlimited <br />
-              Payment Options: BTC, ETH, USDT, LTC, BCH <br />
-              <span className="text-green-600 font-semibold">Instant Withdrawal</span>
-            </p>
           </div>
         </div>
       </div>
