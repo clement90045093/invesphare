@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/app/generated/prisma"
@@ -14,20 +8,17 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
-  name        String?
-  balance     Float        @default(0)
-  deposits    Deposit[]
-  investments Investment[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  balance   Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Deposit {
   id                Int       @id @default(autoincrement())
   userId            String?
-  user              User?     @relation(fields: [userId], references: [id])
   amount            Float
   currency          String
   address           String
@@ -45,24 +36,38 @@ model Deposit {
 model Investment {
   id              Int       @id @default(autoincrement())
   userId          String?
-  user            User?     @relation(fields: [userId], references: [id])
-  plan            String // starter, professional, premium
+  plan            String
   amount          Float
   currency        String
-  dailyRate       Float // e.g., 0.008 for 0.8%
-  duration        Int // duration in days
-  expectedProfit  Float // calculated total profit
-  totalReturn     Float // amount + expectedProfit
-  address         String // deposit address
+  dailyRate       Float
+  duration        Int
+  expectedProfit  Float
+  totalReturn     Float
+  address         String
   reference       String    @unique
-  status          String    @default("pending") // pending, active, completed, cancelled
+  status          String    @default("pending")
   txHash          String?
   receivedAmount  Float?
   providerPayload Json?
   expiresAt       DateTime?
-  startedAt       DateTime? // when investment became active
-  maturesAt       DateTime? // when investment completes
+  startedAt       DateTime?
+  maturesAt       DateTime?
   createdAt       DateTime  @default(now())
   confirmedAt     DateTime?
   completedAt     DateTime?
+}
+
+model Withdrawal {
+  id            String    @id(map: "Withdrawal_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transactionId String    @unique(map: "Withdrawal_transactionId_key")
+  amount        Decimal   @db.Decimal(10, 2)
+  walletAddress String
+  email         String
+  status        String    @default("pending")
+  approvedAt    DateTime? @db.Timestamp(6)
+  rejectedAt    DateTime? @db.Timestamp(6)
+  createdAt     DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime? @default(now()) @updatedAt @db.Timestamp(6)
+
+  @@map("withdrawal")
 }
