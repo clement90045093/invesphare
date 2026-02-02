@@ -53,10 +53,15 @@ export default function WithdrawalForm({ onSuccess }: WithdrawalFormProps) {
       return false;
     }
 
-    if (!walletAddress.match(/^0x[a-fA-F0-9]{40}$/) && !walletAddress.match(/^bc1/)) {
-      setError('Please enter a valid crypto wallet address');
-      return false;
-    }
+    
+  const isEthereum = /^0x[a-fA-F0-9]{40}$/.test(walletAddress);
+  const isBitcoin = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/.test(walletAddress);
+  const isTron = /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(walletAddress);
+
+  if (!isEthereum && !isBitcoin && !isTron) {
+  setError("Please enter a valid crypto wallet address");
+  return false;
+  }
 
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       setError('Please enter a valid email address');
