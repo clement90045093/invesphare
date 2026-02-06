@@ -1,5 +1,5 @@
-const BOT_TOKEN = "8290283851:AAEhp4p_9N09yqUabiPigO38Qx-VApLvOr8";
-const CHAT_ID = "914539208";
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 export interface TelegramNotificationPayload {
   type: 'deposit' | 'withdrawal';
