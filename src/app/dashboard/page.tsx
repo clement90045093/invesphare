@@ -68,9 +68,9 @@ export default function DashboardPage() {
 
   const menuItems = [
     { name: "Dashboard", icon: <FiHome />, path: "/dashboard" },
-    { name: "Account", icon: <FiUser /> },
-    { name: "Support", icon: <FiHelpCircle /> },
-    { name: "P/L Record", icon: <FiFileText /> },
+    { name: "Account", icon: <FiUser />, path: "/account" },
+    { name: "Support", icon: <FiHelpCircle />, path: "/support" },
+    { name: "Investment", icon: <FiFileText />, path: "/investment" },
     { name: "Transactions", icon: <FiActivity />, path: "/transactions" },
     {
       name: "Deposit/Withdrawal",

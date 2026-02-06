@@ -41,12 +41,12 @@ export default function BalanceCards({ summary, loading }: BalanceCardsProps) {
       icon: <FiTrendingUp className="text-blue-400" />,
       color: "text-blue-400",
     },
-    {
-      title: "Pending Deposits",
-      value: summary?.pendingCount || 0,
-      icon: <FiClock className="text-yellow-400" />,
-      color: "text-yellow-400",
-    },
+   {
+  title: "Pending Investments",
+  value: summary?.pendingCount || 0,
+  icon: <FiClock className="text-yellow-400" />,
+  color: "text-yellow-400",
+  },
   ];
 
   return (
