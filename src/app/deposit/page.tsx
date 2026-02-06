@@ -383,29 +383,33 @@ export default function DepositPage() {
                 </h2>
               </div>
               <div className="space-y-6 p-6">
-                {/* Order Summary */}
-                <div className="rounded-lg bg-[#1C2541] p-4">
-                  <h3 className="mb-3 text-sm font-medium uppercase tracking-wide text-gray-500">
-                    Order Summary
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Amount</span>
-                      <span className="font-medium text-white">
-                        ${amount.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Currency</span>
-                      <span className="font-medium text-white">{currency}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Reference</span>
-                      <span className="font-mono text-xs text-emerald-500">
-                        {depositReference}
-                      </span>
-                    </div>
+                {/* Order Summary Table */}
+                <div className="rounded-lg overflow-hidden border border-gray-800">
+                  <div className="bg-[#1C2541] p-4 border-b border-gray-800">
+                    <h3 className="text-sm font-medium uppercase tracking-wide text-gray-400">
+                      Order Summary
+                    </h3>
                   </div>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr className="border-b border-gray-800">
+                        <td className="px-4 py-3 text-gray-400 font-medium">Amount</td>
+                        <td className="px-4 py-3 text-white font-semibold text-right">
+                          ${amount.toLocaleString()}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-800">
+                        <td className="px-4 py-3 text-gray-400 font-medium">Currency</td>
+                        <td className="px-4 py-3 text-white font-semibold text-right">{currency}</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 text-gray-400 font-medium">Reference ID</td>
+                        <td className="px-4 py-3 text-emerald-500 font-mono text-xs text-right break-all">
+                          {depositReference}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
                 {/* Wallet Address */}
@@ -508,26 +512,31 @@ export default function DepositPage() {
                   </p>
                 </div>
 
-                <div className="rounded-lg bg-[#1C2541] p-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Reference</span>
-                    <span className="font-mono text-xs text-emerald-500">
-                      {depositReference}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Amount</span>
-                    <span className="font-medium text-white">
-                      ${amount.toLocaleString()} {currency.split("-")[0]}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Status</span>
-                    <span className="flex items-center gap-1.5 font-medium text-amber-500">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      Verifying
-                    </span>
-                  </div>
+                {/* Verification Details Table */}
+                <div className="rounded-lg overflow-hidden border border-gray-800">
+                  <table className="w-full text-sm">
+                    <tbody>
+                      <tr className="border-b border-gray-800">
+                        <td className="px-4 py-3 text-gray-400 font-medium bg-[#1C2541]">Reference ID</td>
+                        <td className="px-4 py-3 text-emerald-500 font-mono text-xs text-right bg-[#1C2541] break-all">
+                          {depositReference}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-800">
+                        <td className="px-4 py-3 text-gray-400 font-medium">Amount</td>
+                        <td className="px-4 py-3 text-white font-semibold text-right">
+                          ${amount.toLocaleString()} {currency.split("-")[0]}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 text-gray-400 font-medium">Status</td>
+                        <td className="px-4 py-3 text-amber-500 font-medium text-right flex items-center gap-1.5 justify-end">
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          Verifying
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </>
