@@ -21,9 +21,7 @@ export default function Subbodyone() {
               investment companies in the forex and crypto trading industry.
             </p>
           </div>
-          <button className="mt-4 md:mt-0 bg-white text-emerald-700 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition whitespace-nowrap">
-            Read More
-          </button>
+          {/* Read More button removed per request */}
         </div>
       </div>
 
@@ -57,9 +55,6 @@ export default function Subbodyone() {
             instant withdrawals and verified payment options.
           </p>
           <div className="flex gap-4 mt-6">
-            <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition">
-              Read More
-            </button>
             <button className="border border-gray-700 hover:border-emerald-500 text-gray-400 hover:text-white px-8 py-3 rounded-lg font-semibold transition">
               Contact Us
             </button>
