@@ -900,7 +900,9 @@ export default function InvestmentPage() {
               <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
                 <Button
                   variant="outline"
-                  onClick={() => router.push("/support")}
+                  onClick={() => {
+                    if (typeof window !== "undefined") window.location.href = "mailto:investsphere31@gmail.com";
+                  }}
                   className="bg-transparent"
                 >
                   Contact Support

@@ -612,7 +612,7 @@ export default function DepositPage() {
         {/* Footer */}
         <p className="mt-8 text-center text-xs text-gray-500">
           Need help? Contact our{" "}
-          <a href="/support" className="text-emerald-500 hover:underline">
+          <a href="mailto:investsphere31@gmail.com" className="text-emerald-500 hover:underline">
             support team
           </a>
         </p>

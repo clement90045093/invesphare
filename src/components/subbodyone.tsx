@@ -55,9 +55,9 @@ export default function Subbodyone() {
             instant withdrawals and verified payment options.
           </p>
           <div className="flex gap-4 mt-6">
-            <button className="border border-gray-700 hover:border-emerald-500 text-gray-400 hover:text-white px-8 py-3 rounded-lg font-semibold transition">
+            <a href="mailto:investsphere31@gmail.com" className="border border-gray-700 hover:border-emerald-500 text-gray-400 hover:text-white px-8 py-3 rounded-lg font-semibold transition inline-flex items-center justify-center">
               Contact Us
-            </button>
+            </a>
           </div>
         </div>
       </div>
