@@ -73,9 +73,18 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} InvestSphare Global Ltd. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+            <address className="not-italic text-sm text-gray-400 leading-relaxed">
+              14325 96 Ave NW
+              <br />
+              Edmonton, Alberta
+              <br />
+              Canada
+            </address>
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} InvestSphare Global Ltd. All rights reserved.
+            </p>
+          </div>
           <div className="flex gap-8 text-xs font-medium uppercase tracking-tighter">
             <span className="hover:text-white cursor-pointer transition">System Status</span>
             <span className="hover:text-white cursor-pointer transition">Cookie Settings</span>
