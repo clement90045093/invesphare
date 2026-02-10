@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import NavWrapper from "../components/NavWrapper";
+import Footer from "../components/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { createClient } from "@/utils/superbase/server";
 
@@ -69,6 +70,9 @@ export default async function RootLayout({
         <main className="pt-16 min-h-screen">
           {children}
         </main>
+
+        {/* Footer (global) */}
+        <Footer />
 
         {/* Toast notifications */}
         <Toaster />

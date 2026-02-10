@@ -27,6 +27,16 @@ export default function Footer() {
               <FaLinkedin className="hover:text-emerald-500 cursor-pointer transition-colors" size={20} />
               <FaInstagram className="hover:text-emerald-500 cursor-pointer transition-colors" size={20} />
             </div>
+            {/* Mobile address (visible on small screens) */}
+            <div className="md:hidden">
+              <address className="not-italic text-sm text-gray-400 leading-relaxed mt-4">
+                14325 96 Ave NW
+                <br />
+                Edmonton, Alberta
+                <br />
+                Canada
+              </address>
+            </div>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -73,7 +83,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2">
+          <div className="hidden md:flex flex-col items-start text-left space-y-2">
             <address className="not-italic text-sm text-gray-400 leading-relaxed">
               14325 96 Ave NW
               <br />
