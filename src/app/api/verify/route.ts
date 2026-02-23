@@ -1,6 +1,7 @@
-import { createClient } from "@/app/utils/supabase/server";
+import { createClient } from "../../../utils/superbase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { type EmailOtpType } from '@supabase/supabase-js'
+
 
 
 export async function GET(request:NextRequest){
