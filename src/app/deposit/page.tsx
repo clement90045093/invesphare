@@ -140,7 +140,7 @@ export default function DepositPage() {
         : 2
     : 1;
 
-  const walletAddress = "TXkVvbJUr8dG9RnLfnMz8aTpSzk9kXyR2P";
+  const walletAddress = "TFTL23f9UMhoYPsijQXmBkhgFri7Eez59B";
 
   const confirmDeposit = async () => {
     setError(null);
