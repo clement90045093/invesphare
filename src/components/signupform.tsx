@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -8,6 +7,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignUpActions } from "./actions/signupActions";
 import { toast } from "sonner";
+import { EmailVerificationCard } from "../components/email-verification-card";
 
 // =========================
 //  ZOD VALIDATION SCHEMA
@@ -28,6 +28,8 @@ type SignupSchemaType = z.infer<typeof SignupSchema>;
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [accountCreated, setAccountCreated] = useState(false);
+  const [createdEmail, setCreatedEmail] = useState("");
 
   const {register,handleSubmit,formState: { errors, isSubmitting }, reset} = useForm<SignupSchemaType>({
     resolver: zodResolver(SignupSchema),
@@ -43,12 +45,8 @@ export default function SignupPage() {
     try{
       const  creatUser  =  await  SignUpActions(userdata)
       if(creatUser?.message === "ok"){
-
-        toast("Account  created",  {
-          description:"Your  account  has  been  successfully created",
-          style:{background:"green",  color:"white"}
-        })
-
+        setCreatedEmail(data.email);
+        setAccountCreated(true);
       }
 
     }catch(error:any){
@@ -62,6 +60,21 @@ export default function SignupPage() {
       }
     }
   };
+
+  // Show verification card after account creation
+  if (accountCreated) {
+    return (
+      <EmailVerificationCard
+        email={createdEmail}
+        onResendEmail={() => {
+          toast("Verification email sent", {
+            description: "Please check your inbox",
+            style: { background: "green", color: "white" }
+          });
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
@@ -169,8 +182,3 @@ export default function SignupPage() {
     </div>
   );
 }
-
-
-
-
-
